@@ -20,7 +20,7 @@ brightness_count = dict(zip(*numpy.unique(frame_brightness, return_counts=True))
 brightness_count = [brightness_count.get(x, 0) for x in range(256)]  # 1D list of all brightness levels
 dark, light = sorted(scipy.signal.find_peaks(brightness_count)[0])  # Lowest peak is the dark value, high is light. There should only be two peaks (if there is no bad noise)
 
-light_frames = ((lambda x: (x - dark) >= (light - dark)/2)(frame_brightness))  # List all light frames
+light_frames = (lambda x: is_high(x, dark, light))(frame_brightness)  # List all light frames
 
 light_frames = numpy.trim_zeros(numpy.trim_zeros(light_frames != True) != True)  # Trim light then trim darkness
 light_frames += False  # Add trailing False to properly print last light
